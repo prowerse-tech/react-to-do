@@ -1,40 +1,22 @@
 import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { deleteTodo, completeTodo } from '../actions';
 
-const TodoList = ({todos, setTodos, setEditTodo}) => {
+const TodoList = () => {
 
-    const handleComplete = (todo) => {
-        setTodos(
-            todos.map((item) => {
-                if(item.id === todo.id) {
-                    return {...item, completed: !item.completed}
-                }
-                return item;
-            })
-        );
-    };
-
-    const handleEdit = ({id}) => {
-        const findTodo = todos.find((todo) => todo.id === id);
-        setEditTodo(findTodo);
-    };
-
-    const handleDelete = ({id}) => {
-        setTodos(todos.filter((todo) => todo.id !== id));
-    };
-
+    const list = useSelector((state) => state.todoReducers.list);
+    const dispatch = useDispatch('');
+    
     return (
         <div>
             {
-                todos.map((todo) => (
-                    <li className="list-item" key={todo.id}>
-                        <input type="text" value={todo.title} className={`list ${todo.completed ? "complete" : ""}`} onChange={(event) => event.preventDefault()} />
-                        <div className="button-complete" onClick={() => handleComplete(todo)}>
+                list.map((elem) => (
+                    <li className="list-item" key={elem.id}>
+                        <input type="text" value={elem.data} className={`list ${elem.completed ? "complete" : ""}`}  />
+                        <div className="button-complete" onClick={() => dispatch(completeTodo(elem.id))}>
                             <i className="fa fa-check-circle" ></i>
                         </div>
-                        <div className="button-edit" onClick={() => handleEdit(todo)}>
-                            <i className="fa fa-edit" ></i>
-                        </div>
-                        <div className="button-delete" onClick={() => handleDelete(todo)}>
+                        <div className="button-delete" onClick={() => dispatch(deleteTodo(elem.id))}>
                             <i className="fa fa-trash" ></i>
                         </div>
                     </li>
