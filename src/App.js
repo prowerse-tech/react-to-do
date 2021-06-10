@@ -1,34 +1,42 @@
 import './App.css';
 import Form from './components/Form';
 import Header from './components/Header';
-import React , {useState, useEffect} from 'react'
+import React from 'react'
 import TodoList from './components/TodoList';
+import { Route, Switch } from "react-router-dom"
+import About from './components/About';
+import NotMatch from './components/NotMatch';
+import Navbar from './components/Navbar';
 
 const App = () => {
 
-  const initialState = JSON.parse(localStorage.getItem("todos")) || [];
-  const [input, setInput] = useState("");
-  const [todos, setTodos] = useState(initialState);
-  const [editTodo, setEditTodo] = useState(null);
-
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos]);
-
   return (
-    <div className="container">
-      <div className="app-wrapper">
-        <div>
-          <Header />
+    <>
+      <Navbar />
+      <Switch>
+      <Route exact path="/">
+        <div className="container">
+          <div className="app-wrapper">
+            <div>
+              <Header />
+            </div>
+            <div>
+              <Form />
+            </div>
+            <div>
+              <TodoList />
+            </div>
+          </div>
         </div>
-        <div>
-          <Form input={input} setInput={setInput} todos={todos} setTodos={setTodos} editTodo={editTodo} setEditTodo={setEditTodo} />
-        </div>
-        <div>
-          <TodoList todos={todos} setTodos={setTodos} setEditTodo={setEditTodo} />
-        </div>
-      </div>
-    </div>
+      </Route>
+      <Route path="/about" component={About}>
+        <About />
+      </Route>
+      <Route path="*">
+        <NotMatch />
+      </Route>
+      </Switch>
+    </>
   );
 }
 
